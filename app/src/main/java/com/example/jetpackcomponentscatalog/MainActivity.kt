@@ -1,91 +1,224 @@
 package com.example.jetpackcomponentscatalog
 
+
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.contentColorFor
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.state.ToggleableState
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.jetpackcomponentscatalog.ui.theme.CheckInfo
 import com.example.jetpackcomponentscatalog.ui.theme.JetpackComponentsCatalogTheme
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            JetpackComponentsCatalogTheme {
+                SuperHeroStickyView()
+
+            /*  Surface() {
+
+                    var show by rememberSaveable { mutableStateOf(false)
+
+                    }
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                        Button(onClick = { show=true }) {
+                            Text(text = "Mostrar Dialogo")  }
+
+                        // MyDialog(show=show, onOcultar ={show=false }, onConfirm = {Log.i("Hernan","Click")} )
+                        MyConfirmationDialog(
+                            show = show,
+                            onOcultar = { show=false }) {
+
+                        }
+
+                    }
+                }*/
+            }
+
+
+
           //  var myText by remember { mutableStateOf("")}
           //  MyTextFieldOutLined(myText) {myText=it}
            // MyCheckBoxWithText()
 
 
          //   MyCheckBoxWithTextCompleted(checkInfo)
-        val myOptions = getOptions(listOf("600901","600902","600903","600905","600967","600998","6005033","600852","600900","600125","602358"))
+   //     val myOptions = getOptions(listOf("600901","600902","600903","600905","600967","600998","6005033","600852","600900","600125","602358"))
+    //    var selected by rememberSaveable { mutableStateOf("Ejemplo 1") }
 
-            Column {
-                myOptions.forEach {MyCheckBoxWithTextCompleted(it)}
-            }
+            /*  Column {
+                /* myOptions.forEach {
+                  //   MyCheckBoxWithTextCompleted(it)
+                     RadioButton (it.tittle)
+                 }*/
+                  MyRadioButtonList(selected){selected=it}
+              }*/
 
         }
     }
 }
 
+@Preview
+@Composable
+fun MyDropDownMenu(){
+    var selectedText by rememberSaveable {mutableStateOf("")}
+    var expanded by rememberSaveable {mutableStateOf(false)}
+    val desserts= listOf("Helado","Chocolate","Vainilla","Frutas","Comida","cafe")
+    Column(Modifier.padding(20.dp)) {
+        OutlinedTextField(
+            value =selectedText ,
+            onValueChange = {selectedText=it},
+            enabled = false,
+            readOnly = true,
+            modifier= Modifier
+                .clickable { expanded = true }
+                .fillMaxWidth()
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = {expanded=false },
+            modifier= Modifier.fillMaxWidth()
+        ) {
+            desserts.forEach{ desserts ->
+                DropdownMenuItem(  onClick = {
+                    expanded=false
+                    selectedText=desserts
+                }  ) {
+                    Text(text = desserts)
+
+                }
+                    
+                }
+        
+    }
+    }}
+@Composable
+fun MyDivider(){
+    Divider(
+        Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp), color = Color.Red)
+}
+
+ @Composable
+     fun MyBadgeBox() {
+        Box(modifier = Modifier.padding(16.dp)
+        ) {
+            BadgedBox(
+
+                modifier =  Modifier.padding(16.dp),
+
+                badge = { Badge { Text(text = "1") } }
+            )
+            {
+                Icon( imageVector = Icons.Default.Star, contentDescription = "" )
+
+            }
+        }
+    }
+
+@Composable
+fun MyCard(){   Card(
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp),
+    elevation = 12.dp,
+    shape = MaterialTheme.shapes.medium,
+    //backgroundColor = Color.Red,
+   // contentColor = Color.Green,
+    border = BorderStroke(5.dp, Color.Black)
+) {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text(text = "Ejemplo 1")
+        Text(text = "Ejemplo 2")
+        Text(text = "Ejemplo 3")
+    }
+}
+}
+@Composable
+fun MyRadioButtonList(name:String,AlSeleccionar:(String) ->Unit){
+   Column(Modifier.fillMaxWidth())
+   {
+        Row(Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { AlSeleccionar("EJEMPLO1") })) {
+            RadioButton(selected = name=="EJEMPLO1",  onClick = { AlSeleccionar("EJEMPLO1")} )
+            Text(text ="EJEMPLO1" )
+            }
+        Row(Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { AlSeleccionar("EJEMPLO2") })) {
+            RadioButton(selected = name=="EJEMPLO2", onClick = {AlSeleccionar("EJEMPLO2" )} )
+            Text(text ="EJEMPLO2" )
+        }
+        Row(Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { AlSeleccionar("EJEMPLO3") })) {
+            RadioButton(selected = name=="EJEMPLO3", onClick = { AlSeleccionar("EJEMPLO3")} )
+            Text(text ="EJEMPLO3" )
+        }
+        Row(Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { AlSeleccionar("EJEMPLO4") }) ) {
+
+            RadioButton(selected = name=="EJEMPLO4", onClick = { AlSeleccionar("EJEMPLO4")} )
+            Text(text ="EJEMPLO4")
+        }
+    }
+
+}
+
+@Composable
+fun RadioButton(nombre:String){
+    Row(Modifier.fillMaxWidth()) {
+
+        RadioButton(selected = true, onClick = { }, enabled = true, colors = RadioButtonDefaults.colors(
+            selectedColor = Color.Red
+            , unselectedColor = Color.Yellow
+            , disabledColor = Color.Green
+        ) )
+        Text(text =nombre )
+    
+    //RadioButton(selected=false,onClick={ })
+
+
+}  }
+
+
 @Composable
 fun MyTriStatusCheckBox(){
     var status by rememberSaveable{ mutableStateOf(ToggleableState.Indeterminate) }
+
+    TriStateCheckbox(state = status, onClick = {
+        status=when(status){
+            ToggleableState.On -> ToggleableState.Off
+            ToggleableState.Off -> ToggleableState.On
+            ToggleableState.Indeterminate -> ToggleableState.On
+        }
+    })
 
    
 }
@@ -199,8 +332,7 @@ fun Mytext(){
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
+ @Composable
 fun MytextField(){
     var myText by remember {
         mutableStateOf("")
@@ -208,8 +340,7 @@ fun MytextField(){
 
     TextField(value = myText, onValueChange = {myText= it })
 }
- @ExperimentalMaterial3Api
-@Composable
+ @Composable
 fun MytextFieldAdvance(){
     var myText by remember {
         mutableStateOf("")
@@ -226,8 +357,7 @@ fun MytextFieldAdvance(){
         },
         label = { Text(text = "Introduce tu nombre")})
 }
-  @OptIn(ExperimentalMaterial3Api::class)
-@Composable
+ @Composable
 fun MyTextFieldOutLined(myText:String,onValueChange:(String)->Unit ){
     Column(
         Modifier
@@ -257,7 +387,7 @@ var enabled by rememberSaveable {  mutableStateOf(true)}
             enabled=enabled,
             colors =  ButtonDefaults.buttonColors(
                 contentColor = Color.White,
-                containerColor = Color.Black ),
+                backgroundColor = Color.Black ),
             border = BorderStroke(2.dp, Color.Yellow) ) {
             Text(text = "Hola")
 
@@ -268,8 +398,8 @@ var enabled by rememberSaveable {  mutableStateOf(true)}
 
             colors =  ButtonDefaults.buttonColors(
                  contentColor = Color.White,
-                 containerColor = Color.Black ,
-             disabledContainerColor = Color.Red
+                backgroundColor = Color.Black ,
+             disabledBackgroundColor = Color.Red
              ),
             border = BorderStroke(2.dp, Color.Black) ) {
             Text(text = "OutLined")
@@ -306,7 +436,6 @@ fun MyIcon(){
         tint= Color.Red
     )
 }
-@Preview
 @Composable
 fun MyProgress(){
     var showLoading by rememberSaveable {
@@ -360,7 +489,6 @@ fun MyProgressAdvance(){
         }
     }
 }
-@Preview
 @Composable
 fun MySwitch(){
     var state by rememberSaveable{ mutableStateOf(true) }
